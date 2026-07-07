@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>馬拉松訓練計畫</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="馬拉松訓練">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FF6F5E'/%3E%3Cstop offset='100%25' stop-color='%237C6CE0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Ccircle cx='38' cy='16' r='6' fill='white'/%3E%3Cpath d='M14 50 L26 34 L36 40 L44 24' stroke='white' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M44 24 L52 20' stroke='white' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<style>
+  :root{
+    --coral:#FF6F5E;
+    --coral-dark:#E85A4A;
+    --coral-light:#FFE8E4;
+    --purple:#7C6CE0;
+    --purple-dark:#5F4FC7;
+    --purple-light:#EFEBFC;
+    --cream:#FFF8F3;
+    --paper:#FFFFFF;
+    --ink:#2E2A3B;
+    --ink-soft:#7A7488;
+    --line:#F0E7E0;
+    --gold:#F4B942;
+  }
+  *{box-sizing:border-box;}
+  body{
+    font-family:'DM Sans', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    margin:0;
+    padding-bottom:80px;
+  }
+  .mono{ font-family:'DM Mono', monospace; }
+
+  /* ---------- Header ---------- */
+  header{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg, var(--coral) 0%, var(--purple) 100%);
+    color:white;
+    padding:48px 24px 40px;
+    border-radius:0 0 32px 32px;
+  }
+  header::after{
+    content:"";
+    position:absolute; right:-40px; top:-40px;
+    width:220px; height:220px; border-radius:50%;
+    background:rgba(255,255,255,0.12);
+  }
+  header .inner{ max-width:960px; margin:0 auto; position:relative; z-index:2; }
+  .eyebrow{
+    font-family:'DM Mono', monospace;
+    letter-spacing:0.15em;
+    font-size:12px;
+    text-transform:uppercase;
+    opacity:0.85;
+    margin:0 0 8px;
+  }
+  h1{ font-size:30px; font-weight:800; margin:0 0 20px; line-height:1.3; }
+  .glass{
+    background:rgba(255,255,255,0.94);
+    border-radius:20px;
+    padding:20px 24px;
+    display:inline-block;
+    color:var(--ink);
+    box-shadow:0 12px 30px rgba(90,50,120,0.15);
+  }
+  .glass p.label{ font-size:13px; color:var(--ink-soft); font-weight:600; margin:0 0 10px; }
+  .cd-row{ display:flex; gap:18px; }
+  .cd-item{ display:flex; flex-direction:column; align-items:center; }
+  .cd-item span.num{ font-size:28px; font-weight:800; color:var(--purple-dark); font-family:'DM Mono', monospace; }
+  .cd-item span.unit{ font-size:11px; color:var(--ink-soft); }
+  .cd-sep{ font-size:26px; color:var(--line); font-weight:700; }
+
+  main{ max-width:960px; margin:0 auto; padding:0 20px; margin-top:28px; }
+
+  /* ---------- Stat cards ---------- */
+  .stat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:20px; }
+  .stat-grid.two-col{ grid-template-columns:repeat(2,1fr); }
+  @media (max-width:768px){ .stat-grid{ grid-template-columns:1fr; } .stat-grid.two-col{ grid-template-columns:1fr; } }
+  .card{
+    background:var(--paper);
+    border-radius:20px;
+    padding:20px;
+    border:1px solid var(--line);
+    box-shadow:0 6px 18px rgba(90,50,120,0.05);
+  }
+  .stat-top{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .stat-label{ font-size:13px; color:var(--ink-soft); font-weight:600; margin:0 0 6px; }
+  .stat-value{ font-size:24px; font-weight:800; margin:0; }
+  .icon-badge{
+    height:44px; width:44px; border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; flex-shrink:0;
+  }
+  .badge-coral{ background:var(--coral-light); color:var(--coral-dark); }
+  .badge-purple{ background:var(--purple-light); color:var(--purple-dark); }
+  .badge-gold{ background:#FFF3D6; color:#B9820A; }
+  .progress-track{
+    width:100%; background:var(--line); border-radius:999px; height:8px; margin-top:14px; overflow:hidden;
+  }
+  .progress-fill{
+    background:linear-gradient(90deg, var(--coral), var(--purple));
+    height:100%; border-radius:999px; transition:width 1s ease;
+  }
+  .period-card{
+    background:var(--coral-light); border:1px solid #FFD7CF; cursor:pointer;
+    display:flex; align-items:center; justify-content:space-between;
+    transition:transform .2s ease;
+  }
+  .period-card:hover{ transform:translateY(-2px); }
+  .period-card p.label{ color:var(--coral-dark); }
+  .period-card p.hint{ font-size:12px; color:var(--coral-dark); margin-top:4px; opacity:0.85; }
+
+  /* ---------- Pace calculator & gear ---------- */
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:24px; }
+  @media (max-width:900px){ .grid-2{ grid-template-columns:1fr; } }
+  .card h3{ display:flex; align-items:center; gap:10px; font-size:17px; font-weight:800; margin:0 0 12px; }
+  .card h3 i{ color:var(--purple); font-size:19px; }
+  .card p.desc{ font-size:12px; color:var(--ink-soft); margin:0 0 16px; }
+  .pace-inputs{ display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+  .pace-inputs input{
+    width:64px; text-align:center; font-size:17px; font-weight:700; color:var(--ink);
+    background:var(--cream); border:1.5px solid var(--line); border-radius:10px; padding:8px 4px;
+    font-family:'DM Mono', monospace;
+  }
+  .pace-inputs input:focus{ outline:none; border-color:var(--purple); }
+  .pace-inputs span{ color:var(--ink-soft); font-weight:600; font-size:14px; }
+  .pace-results{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:auto; }
+  .pace-box{ text-align:center; border-radius:14px; padding:10px 6px; }
+  .pace-box p.tag{ font-size:11px; font-weight:700; margin:0 0 4px; }
+  .pace-box p.val{ font-size:17px; font-weight:800; margin:0; font-family:'DM Mono', monospace; }
+  .pace-box.race{ background:var(--purple-light); }
+  .pace-box.race p.tag{ color:var(--purple-dark); }
+  .pace-box.easy{ background:#E8F6ED; }
+  .pace-box.easy p.tag{ color:#2E9E5B; }
+  .pace-box.tempo{ background:var(--coral-light); }
+  .pace-box.tempo p.tag{ color:var(--coral-dark); }
+
+  .gear-card{ display:flex; flex-direction:column; height:280px; }
+  .gear-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .gear-pill{ font-size:12px; font-weight:700; background:var(--purple-light); color:var(--purple-dark); padding:4px 10px; border-radius:999px; }
+  .gear-list{ overflow-y:auto; padding-right:6px; flex:1; }
+  .gear-list::-webkit-scrollbar{ width:5px; }
+  .gear-list::-webkit-scrollbar-thumb{ background:var(--line); border-radius:4px; }
+  .gear-row{ display:flex; align-items:center; gap:12px; padding:7px 2px; }
+  .gear-check{ position:relative; width:20px; height:20px; flex-shrink:0; }
+  .gear-check input{ position:absolute; opacity:0; width:20px; height:20px; margin:0; cursor:pointer; }
+  .gear-box{ width:20px; height:20px; border:2px solid var(--line); border-radius:6px; display:flex; align-items:center; justify-content:center; }
+  .gear-check input:checked + .gear-box{ background:var(--coral); border-color:var(--coral); }
+  .gear-box i{ color:white; font-size:10px; opacity:0; }
+  .gear-check input:checked + .gear-box i{ opacity:1; }
+  .gear-name{ font-size:14px; font-weight:500; }
+  .gear-name.done{ text-decoration:line-through; color:var(--ink-soft); }
+
+  /* ---------- Tips accordion ---------- */
+  details.tips{ background:var(--paper); border-radius:20px; border:1px solid var(--line); overflow:hidden; margin-bottom:24px; }
+  details.tips summary{
+    list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+    padding:18px 22px; background:linear-gradient(90deg, var(--purple-light), var(--paper));
+  }
+  details.tips summary::-webkit-details-marker{ display:none; }
+  .tips-title{ display:flex; align-items:center; gap:12px; font-weight:800; font-size:16px; }
+  .tips-icon{ height:38px; width:38px; border-radius:12px; background:var(--purple-light); color:var(--purple-dark); display:flex; align-items:center; justify-content:center; }
+  .chev{ height:30px; width:30px; border-radius:50%; background:white; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--ink-soft); transition:transform .3s; }
+  details[open] .chev{ transform:rotate(180deg); }
+  .tips-body{ padding:22px; border-top:1px solid var(--line); display:grid; grid-template-columns:1fr 1fr; gap:28px; background:#FFFCFA; overflow:hidden; }
+  @media (max-width:768px){ .tips-body{ grid-template-columns:1fr; } .tips-body[style]{ grid-template-columns:1fr !important; } }
+  .tips-col h4{ font-size:14px; font-weight:800; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--line); padding-bottom:8px; margin:0 0 12px; }
+  .tips-col ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px; }
+  .tips-col li{ display:flex; align-items:flex-start; gap:10px; font-size:13px; color:#57506A; line-height:1.5; }
+  .tips-col li i{ margin-top:3px; flex-shrink:0; }
+
+  /* ---------- Tabs & week cards ---------- */
+  .tabs{ display:flex; gap:10px; overflow-x:auto; padding-bottom:10px; margin-bottom:20px; scrollbar-width:none; }
+  .tabs::-webkit-scrollbar{ display:none; }
+  .tab-btn{
+    flex-shrink:0; padding:10px 22px; border-radius:999px; font-weight:700; font-size:14px;
+    border:1.5px solid var(--line); background:white; color:var(--ink-soft); cursor:pointer; transition:.2s;
+  }
+  .tab-btn.active{ background:linear-gradient(90deg,var(--coral),var(--purple)); color:white; border-color:transparent; }
+  @media (max-width:600px){
+    .tab-btn{ padding:8px 14px; font-size:12.5px; }
+    .tabs{ gap:8px; }
+  }
+
+  .month-title{ font-size:19px; font-weight:800; margin:0 0 18px; }
+  .week-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:900px){ .week-grid{ grid-template-columns:1fr; } }
+  .week-card{ background:var(--paper); border-radius:20px; border:1.5px solid var(--line); padding:18px; animation:fadeIn .4s ease; }
+  .week-card.period{ border-color:#FFCFC5; background:#FFFAF9; }
+  .week-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .coach-note{
+    font-size:12px; line-height:1.6; color:var(--purple-dark);
+    background:var(--purple-light); border-radius:12px; padding:10px 12px;
+    margin-bottom:14px; font-weight:500;
+    white-space:normal; overflow-wrap:break-word;
+  }
+  .week-head h4{ margin:0; font-size:16px; font-weight:800; }
+  .period-btn{ font-size:12px; font-weight:700; padding:6px 12px; border-radius:999px; border:none; cursor:pointer; background:var(--line); color:var(--ink-soft); }
+  .period-btn.on{ background:var(--coral); color:white; }
+  .task-row{ display:flex; align-items:center; gap:10px; padding:5px 0; }
+  .task-check{ position:relative; width:18px; height:18px; flex-shrink:0; }
+  .task-check input{ position:absolute; opacity:0; width:18px; height:18px; margin:0; cursor:pointer; }
+  .task-box{ width:18px; height:18px; border:2px solid var(--line); border-radius:6px; display:flex; align-items:center; justify-content:center; }
+  .task-check input:checked + .task-box{ background:var(--purple); border-color:var(--purple); }
+  .task-box i{ font-size:9px; color:white; opacity:0; }
+  .task-check input:checked + .task-box i{ opacity:1; }
+  .task-day{ font-size:11px; font-weight:800; color:var(--ink-soft); width:40px; flex-shrink:0; line-height:1.4; text-align:center; }
+  .task-date{ font-size:10px; font-weight:600; color:var(--purple); font-family:'DM Mono', monospace; }
+  .task-text{ font-size:13px; cursor:text; padding:2px 4px; border-radius:6px; flex:1; }
+  .task-text:hover{ background:var(--cream); }
+  .task-text.done{ text-decoration:line-through; color:var(--ink-soft); }
+  .journal{
+    width:100%; margin-top:14px; padding:10px 12px; font-size:13px; border-radius:12px;
+    border:1.5px solid var(--line); font-family:'DM Sans'; resize:vertical; min-height:70px; background:var(--cream);
+    line-height:1.6; overflow-y:hidden;
+  }
+  .journal:focus{ outline:none; border-color:var(--purple); }
+
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+  .save-toast{
+    position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:white; padding:8px 18px; border-radius:999px; font-size:12px;
+    opacity:0; transition:.3s; pointer-events:none; font-family:'DM Mono',monospace; letter-spacing:.02em;
+  }
+  .save-toast.show{ opacity:0.92; transform:translateX(-50%) translateY(0); }
+  .footer-credit{
+    max-width:960px; margin:40px auto 0; padding:24px 20px 0;
+    border-top:1px solid var(--line);
+    text-align:center;
+    font-size:12px;
+    color:var(--ink-soft);
+    font-family:'DM Mono', monospace;
+    letter-spacing:0.02em;
+  }
+  .footer-credit strong{ color:var(--purple-dark); }
+
+  /* ---------- 登入畫面 ---------- */
+  #login-screen{
+    position:fixed; inset:0; z-index:100;
+    background:linear-gradient(135deg, var(--coral) 0%, var(--purple) 100%);
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column; text-align:center; padding:24px;
+    overflow:hidden;
+  }
+  .login-scene{ position:absolute; inset:0; z-index:1; pointer-events:none; }
+  #login-screen .login-card{ position:relative; z-index:2; }
+
+  @keyframes runAcross1{ 0%{ transform:translateX(-80px) scale(1.4); } 100%{ transform:translateX(calc(100vw + 80px)) scale(1.4); } }
+  @keyframes runAcross2{ 0%{ transform:translateX(-60px) scale(1); } 100%{ transform:translateX(calc(100vw + 60px)) scale(1); } }
+  @keyframes runAcross3{ 0%{ transform:translateX(-50px) scale(0.75); } 100%{ transform:translateX(calc(100vw + 50px)) scale(0.75); } }
+  @keyframes legBounce{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-3px); } }
+  @keyframes cloudDrift1{ 0%{ transform:translateX(-40px); } 100%{ transform:translateX(calc(100vw + 40px)); } }
+  @keyframes cloudDrift2{ 0%{ transform:translateX(calc(100vw + 40px)); } 100%{ transform:translateX(-40px); } }
+  @keyframes twinkle{ 0%,100%{ opacity:0.15; } 50%{ opacity:0.6; } }
+  @keyframes flagWave{ 0%,100%{ transform:skewY(0deg); } 50%{ transform:skewY(6deg); } }
+
+  .runner{ position:absolute; }
+  .runner1{ bottom:18%; animation:runAcross1 5s linear infinite; opacity:0.9; }
+  .runner2{ bottom:32%; animation:runAcross2 7.5s linear infinite; animation-delay:1.5s; opacity:0.6; }
+  .runner3{ bottom:45%; animation:runAcross3 10s linear infinite; animation-delay:3s; opacity:0.35; }
+  .runner .legs{ animation:legBounce 0.35s ease-in-out infinite; transform-origin:center; }
+
+  .cloud{ position:absolute; }
+  .cloud1{ top:12%; animation:cloudDrift1 22s linear infinite; opacity:0.16; }
+  .cloud2{ top:22%; animation:cloudDrift2 28s linear infinite; opacity:0.12; }
+
+  .star{ position:absolute; animation:twinkle 2s ease-in-out infinite; }
+  .star1{ top:18%; left:15%; }
+  .star2{ top:30%; left:70%; animation-delay:0.7s; }
+  .star3{ top:40%; left:38%; animation-delay:1.3s; }
+
+  .flag-pole{ position:absolute; top:8%; right:8%; }
+  .flag{ animation:flagWave 1.4s ease-in-out infinite; transform-origin:left center; }
+
+  .ground-line{ position:absolute; bottom:14%; left:0; width:100%; border-top:2px dashed rgba(255,255,255,0.3); }
+
+  @media (prefers-reduced-motion: reduce){
+    .runner, .cloud, .star, .flag, .runner .legs{ animation:none !important; }
+  }
+
+  #login-screen .login-card{
+    background:white; border-radius:24px; padding:40px 32px; max-width:360px; width:100%;
+    box-shadow:0 20px 50px rgba(0,0,0,0.2);
+  }
+  #login-screen h2{ font-size:20px; font-weight:800; color:var(--ink); margin:16px 0 8px; }
+  #login-screen p{ font-size:13px; color:var(--ink-soft); margin:0 0 24px; line-height:1.6; }
+  #login-screen .login-icon{
+    width:56px; height:56px; border-radius:16px; margin:0 auto;
+    background:linear-gradient(135deg, var(--coral), var(--purple));
+    display:flex; align-items:center; justify-content:center; color:white; font-size:26px;
+  }
+  #google-signin-btn{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    width:100%; padding:12px 16px; border-radius:12px; border:1.5px solid var(--line);
+    background:white; font-family:'DM Sans'; font-size:14px; font-weight:700; color:var(--ink);
+    cursor:pointer; transition:.2s;
+  }
+  #google-signin-btn:hover{ background:var(--cream); border-color:var(--purple); }
+  #google-signin-btn img{ width:18px; height:18px; }
+  #login-error{ font-size:12px; color:var(--coral-dark); margin-top:12px; display:none; }
+
+  .user-bar{
+    position:absolute; top:16px; right:20px; z-index:5;
+    display:flex; align-items:center; gap:10px;
+  }
+  .user-bar img{ width:26px; height:26px; border-radius:50%; }
+  .user-bar span{ font-size:12px; color:white; opacity:0.9; }
+  .user-bar button{
+    font-size:12px; font-weight:700; color:white; background:rgba(255,255,255,0.2);
+    border:1px solid rgba(255,255,255,0.4); border-radius:999px; padding:4px 12px; cursor:pointer;
+  }
+  .user-bar button:hover{ background:rgba(255,255,255,0.32); }
+  #app-content{ display:none; }
+
+  /* ---------- 建立課表設定畫面 ---------- */
+  #setup-screen{
+    position:fixed; inset:0; z-index:100;
+    background:linear-gradient(135deg, var(--coral) 0%, var(--purple) 100%);
+    display:flex; align-items:flex-start; justify-content:center;
+    padding:40px 24px; overflow-y:auto;
+  }
+  #setup-screen .setup-card{
+    background:white; border-radius:24px; padding:28px 28px; max-width:420px; width:100%;
+    box-shadow:0 20px 50px rgba(0,0,0,0.2); text-align:left; margin:24px 0;
+  }
+  #setup-screen h2{ font-size:18px; font-weight:800; color:var(--ink); text-align:center; margin:0 0 4px; }
+  #setup-screen p{ font-size:12px; color:var(--ink-soft); line-height:1.5; text-align:center; margin:0 0 16px; }
+  .setup-label{ display:block; font-size:11.5px; font-weight:700; color:var(--ink-soft); margin:10px 0 5px; }
+  .setup-input{
+    width:100%; padding:9px 12px; border-radius:10px; border:1.5px solid var(--line);
+    font-family:'DM Sans'; font-size:13.5px; color:var(--ink); background:var(--cream);
+  }
+  .setup-input:focus{ outline:none; border-color:var(--purple); }
+  .setup-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .setup-section-title{
+    font-size:10.5px; font-weight:800; letter-spacing:0.05em; text-transform:uppercase;
+    color:var(--purple); margin:16px 0 2px; padding-top:12px; border-top:1px solid var(--line);
+  }
+  .setup-submit{
+    width:100%; margin-top:18px; padding:12px; border:none; border-radius:12px;
+    background:linear-gradient(90deg, var(--coral), var(--purple)); color:white;
+    font-family:'DM Sans'; font-size:14px; font-weight:800; cursor:pointer;
+  }
+  .setup-submit:hover{ opacity:0.92; }
+  .setup-secondary{
+    width:100%; margin-top:8px; padding:8px; border:none; background:none;
+    color:var(--purple-dark); font-family:'DM Sans'; font-size:12px; font-weight:700;
+    cursor:pointer; text-decoration:underline;
+  }
+  .setup-error{ display:none; color:var(--coral-dark); font-size:12px; margin-top:10px; text-align:center; }
+
+  .setup-progress{ display:flex; align-items:flex-start; justify-content:center; gap:0; margin:0 0 20px; }
+  .setup-progress-dot{ display:flex; flex-direction:column; align-items:center; gap:4px; width:70px; }
+  .setup-progress-dot span{
+    width:26px; height:26px; border-radius:50%; background:var(--line); color:var(--ink-soft);
+    display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800;
+    transition:.2s;
+  }
+  .setup-progress-dot label{ font-size:10.5px; color:var(--ink-soft); font-weight:600; text-align:center; }
+  .setup-progress-dot.active span{ background:linear-gradient(135deg, var(--coral), var(--purple)); color:white; }
+  .setup-progress-dot.active label{ color:var(--purple-dark); font-weight:800; }
+  .setup-progress-dot.done span{ background:var(--purple); color:white; }
+  .setup-progress-line{ flex:1; height:2px; background:var(--line); margin-top:13px; max-width:40px; }
+
+  .setup-nav{ display:flex; gap:10px; margin-top:18px; }
+  .setup-nav-back{
+    flex:1; padding:11px; border-radius:12px; border:1.5px solid var(--line); background:white;
+    color:var(--ink-soft); font-family:'DM Sans'; font-size:13.5px; font-weight:700; cursor:pointer;
+  }
+  .setup-nav-back:hover{ background:var(--cream); }
+  .setup-nav-next{
+    flex:2; padding:11px; border:none; border-radius:12px;
+    background:linear-gradient(90deg, var(--coral), var(--purple)); color:white;
+    font-family:'DM Sans'; font-size:13.5px; font-weight:800; cursor:pointer;
+  }
+  .setup-nav-next:hover{ opacity:0.92; }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-scene">
+    <div class="cloud cloud1"><svg width="90" height="40" viewBox="0 0 90 40"><ellipse cx="25" cy="22" rx="22" ry="14" fill="white"/><ellipse cx="50" cy="18" rx="26" ry="16" fill="white"/><ellipse cx="70" cy="24" rx="18" ry="12" fill="white"/></svg></div>
+    <div class="cloud cloud2"><svg width="70" height="32" viewBox="0 0 70 32"><ellipse cx="20" cy="18" rx="18" ry="11" fill="white"/><ellipse cx="40" cy="14" rx="20" ry="13" fill="white"/></svg></div>
+
+    <div class="star star1"><svg width="10" height="10"><circle cx="5" cy="5" r="2.5" fill="white"/></svg></div>
+    <div class="star star2"><svg width="8" height="8"><circle cx="4" cy="4" r="2" fill="white"/></svg></div>
+    <div class="star star3"><svg width="10" height="10"><circle cx="5" cy="5" r="2.5" fill="white"/></svg></div>
+
+    <div class="flag-pole">
+      <svg width="50" height="90" viewBox="0 0 50 90">
+        <line x1="4" y1="0" x2="4" y2="90" stroke="white" stroke-width="4"/>
+        <g class="flag"><path d="M4 4 L 46 14 L 4 28 Z" fill="white"/></g>
+      </svg>
+    </div>
+
+    <div class="ground-line"></div>
+
+    <svg class="runner runner1" width="60" height="60" viewBox="-20 -50 60 80">
+      <circle cx="10" cy="-38" r="7" fill="white"/>
+      <path class="legs" d="M -14 20 L -2 0 L 8 5 L 16 -12 L 24 -8 L 14 10 L 4 6 L -6 24 Z" fill="white"/>
+    </svg>
+    <svg class="runner runner2" width="60" height="60" viewBox="-20 -50 60 80">
+      <circle cx="10" cy="-38" r="7" fill="white"/>
+      <path class="legs" d="M -14 20 L -2 0 L 8 5 L 16 -12 L 24 -8 L 14 10 L 4 6 L -6 24 Z" fill="white"/>
+    </svg>
+    <svg class="runner runner3" width="60" height="60" viewBox="-20 -50 60 80">
+      <circle cx="10" cy="-38" r="7" fill="white"/>
+      <path class="legs" d="M -14 20 L -2 0 L 8 5 L 16 -12 L 24 -8 L 14 10 L 4 6 L -6 24 Z" fill="white"/>
+    </svg>
+  </div>
+
+  <div class="login-card">
+    <div class="login-icon"><i class="ph-bold ph-person-simple-run"></i></div>
+    <h2>馬拉松訓練計畫</h2>
+    <p>登入後即可建立自己的訓練計畫、記錄訓練進度，資料只有你自己看得到。</p>
+    <button id="google-signin-btn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+      使用 Google 登入
+    </button>
+    <p id="login-error">登入失敗，請再試一次。</p>
+  </div>
+</div>
+
+<div id="setup-screen" style="display:none;">
+  <div class="setup-card">
+    <div class="login-icon" style="margin:0 0 16px;"><i class="ph-bold ph-flag-checkered"></i></div>
+    <h2 style="margin:0 0 6px;">建立你的訓練計畫</h2>
+    <p style="margin:0 0 12px;">填幾個基本資訊，幫你自動排出每週的長跑遞增課表。之後隨時可以在設定裡調整。</p>
+
+    <div class="setup-progress">
+      <div class="setup-progress-dot active" data-step="1"><span>1</span><label>賽事資訊</label></div>
+      <div class="setup-progress-line"></div>
+      <div class="setup-progress-dot" data-step="2"><span>2</span><label>訓練強度</label></div>
+      <div class="setup-progress-line"></div>
+      <div class="setup-progress-dot" data-step="3"><span>3</span><label>個人化</label></div>
+    </div>
+
+    <div class="setup-step" id="setup-step-1">
+      <label class="setup-label">賽事名稱</label>
+      <input type="text" id="setup-race-name" class="setup-input" placeholder="例如：2026台北馬拉松 21K">
+
+      <label class="setup-label">比賽距離</label>
+      <select id="setup-race-distance" class="setup-input">
+        <option value="5">5K</option>
+        <option value="10">10K</option>
+        <option value="21.0975" selected>半程馬拉松（21.0975K）</option>
+        <option value="42.195">全程馬拉松（42.195K）</option>
+        <option value="custom">自訂距離</option>
+      </select>
+      <input type="number" id="setup-race-distance-custom" class="setup-input" placeholder="輸入公里數，例如 15" style="display:none; margin-top:8px;" min="1" max="200" step="0.1">
+
+      <div class="setup-row">
+        <div>
+          <label class="setup-label">開始訓練日期</label>
+          <input type="date" id="setup-start-date" class="setup-input">
+        </div>
+        <div>
+          <label class="setup-label">比賽日期</label>
+          <input type="date" id="setup-race-date" class="setup-input">
+        </div>
+      </div>
+
+      <p id="setup-weeks-info" style="text-align:left; font-size:12px; color:var(--purple-dark); margin:10px 0 0; font-weight:600;"></p>
+    </div>
+
+    <div class="setup-step" id="setup-step-2" style="display:none;">
+      <div class="setup-row">
+        <div>
+          <label class="setup-label">起始 LSD 距離（K）</label>
+          <input type="number" id="setup-start-lsd" class="setup-input" value="8" min="3" max="20">
+        </div>
+        <div>
+          <label class="setup-label">巔峰 LSD 距離（K）</label>
+          <input type="number" id="setup-peak-lsd" class="setup-input" value="16" min="8" max="35">
+        </div>
+      </div>
+      <div class="setup-row">
+        <div>
+          <label class="setup-label">減量週數</label>
+          <input type="number" id="setup-taper-weeks" class="setup-input" value="2" min="1" max="4">
+        </div>
+        <div>
+          <label class="setup-label">是否需要生理期調整功能</label>
+          <select id="setup-track-period" class="setup-input">
+            <option value="yes">需要</option>
+            <option value="no">不需要</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="setup-step" id="setup-step-3" style="display:none;">
+      <div class="setup-row">
+        <div>
+          <label class="setup-label">飲食習慣</label>
+          <select id="setup-diet-type" class="setup-input">
+            <option value="none">不限</option>
+            <option value="vegetarian">蛋奶素</option>
+            <option value="vegan">全素</option>
+          </select>
+        </div>
+        <div>
+          <label class="setup-label">賽事氣候特性</label>
+          <select id="setup-climate-type" class="setup-input">
+            <option value="normal">一般</option>
+            <option value="hot">炎熱</option>
+            <option value="cold">寒冷</option>
+            <option value="windy">多風</option>
+            <option value="humid">潮濕悶熱</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="setup-nav">
+      <button id="setup-back-btn" class="setup-nav-back" style="visibility:hidden;">上一步</button>
+      <button id="setup-next-btn" class="setup-nav-next">下一步</button>
+    </div>
+    <button id="setup-submit-btn" class="setup-submit" style="display:none;">產生我的課表</button>
+    <button id="setup-template-btn" class="setup-secondary">或直接套用墾丁半馬範本</button>
+    <p id="setup-error" class="setup-error">請確認賽事名稱與日期都已填寫。</p>
+  </div>
+</div>
+
+<div id="app-content" style="display:none;">
+<header>
+  <div class="user-bar" id="user-bar" style="display:none;">
+    <img id="user-avatar" src="" alt="">
+    <span id="user-name"></span>
+    <button id="logout-btn">登出</button>
+  </div>
+  <div class="inner">
+    <p class="eyebrow" id="race-eyebrow">Race Countdown</p>
+    <h1 id="race-title">半馬備賽計畫</h1>
+    <div class="glass">
+      <p class="label" id="countdown-label">距離比賽倒數</p>
+      <div class="cd-row" id="countdown-container">
+        <div class="cd-item"><span class="num" id="cd-days">00</span><span class="unit">天</span></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-item"><span class="num" id="cd-hours">00</span><span class="unit">時</span></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-item"><span class="num" id="cd-mins">00</span><span class="unit">分</span></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-item"><span class="num" id="cd-secs">00</span><span class="unit">秒</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="stat-grid">
+    <div class="card">
+      <div class="stat-top">
+        <div>
+          <p class="stat-label">總體完成度</p>
+          <p class="stat-value" id="total-progress-text">0%</p>
+        </div>
+        <div class="icon-badge badge-purple"><i class="ph-bold ph-trophy"></i></div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-bar-fill" style="width:0%"></div></div>
+    </div>
+    <div class="card" style="display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <p class="stat-label">已完成訓練日</p>
+        <p class="stat-value" id="completed-days-text">0 / 140</p>
+      </div>
+      <div class="icon-badge badge-gold"><i class="ph-bold ph-check-circle"></i></div>
+    </div>
+    <div class="card period-card" id="period-stat-card" onclick="alert('溫馨提醒：當週若按下「生理期模式」按鈕，該週課表會自動調整為減量恢復模式！')">
+      <div>
+        <p class="stat-label label">生理期動態調整</p>
+        <p class="hint">遇到經期請點擊各週的按鈕</p>
+      </div>
+      <div class="icon-badge badge-coral"><i class="ph-bold ph-heartbeat"></i></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card" style="display:flex; flex-direction:column;">
+      <h3><i class="ph-bold ph-timer"></i> <span id="pace-calc-title">半馬目標配速計算機</span></h3>
+      <p class="desc">輸入預期完賽時間，自動換算平日訓練配速：</p>
+      <div class="pace-inputs">
+        <input type="number" id="pace-h" value="2" min="1" max="4" oninput="calculatePace()">
+        <span>小時</span>
+        <input type="number" id="pace-m" value="15" min="0" max="59" oninput="calculatePace()">
+        <span>分</span>
+      </div>
+      <div class="pace-results">
+        <div class="pace-box race"><p class="tag">🏃 比賽配速</p><p class="val" id="res-race">6'23"</p></div>
+        <div class="pace-box easy"><p class="tag">🐢 輕鬆跑 (Z2)</p><p class="val" id="res-easy">7'38"</p></div>
+        <div class="pace-box tempo"><p class="tag">💨 節奏跑</p><p class="val" id="res-tempo">6'18"</p></div>
+      </div>
+    </div>
+
+    <div class="card gear-card">
+      <div class="gear-head">
+        <h3 style="margin:0;"><i class="ph-bold ph-suitcase-rolling" style="color:var(--coral-dark);"></i> <span id="gear-title-text">遠征裝備清單</span></h3>
+        <span class="gear-pill" id="gear-progress">0/10</span>
+      </div>
+      <div class="gear-list" id="gear-list-container"></div>
+    </div>
+  </div>
+
+  <details class="tips">
+    <summary>
+      <div class="tips-title">
+        <div class="tips-icon"><i class="ph-bold ph-lightbulb"></i></div>
+        <span id="tips1-title">教練備賽小叮嚀與蛋奶素飲食指南</span>
+      </div>
+      <div class="chev"><i class="ph-bold ph-caret-down"></i></div>
+    </summary>
+    <div class="tips-body">
+      <div class="tips-col" id="tips1-strategy-col">
+        <h4><i class="ph-bold ph-person-simple-run" style="color:var(--purple);"></i> 核心訓練策略</h4>
+        <ul>
+          <li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span><strong>80/20 法則：</strong>大膽放慢，拒絕無效的垃圾里程。</span></li>
+          <li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span><strong>重訓與跑步分離：</strong>給雙腿 4 天修復期，迎接週六長跑。</span></li>
+          <li id="tips1-period-bullet"><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span><strong>傾聽生理週期：</strong>勇敢開啟「生理期模式」，降低強度。</span></li>
+        </ul>
+      </div>
+      <div class="tips-col" id="tips1-nutrition-col"></div>
+    </div>
+  </details>
+
+  <details class="tips" style="margin-top:16px;">
+    <summary>
+      <div class="tips-title">
+        <div class="tips-icon" style="background:var(--coral-light); color:var(--coral-dark);"><i class="ph-bold ph-medal"></i></div>
+        <span id="coach-tips-title">教練加碼提醒：訓練 × 賽道 × 賽前營養</span>
+      </div>
+      <div class="chev"><i class="ph-bold ph-caret-down"></i></div>
+    </summary>
+    <div class="tips-body" style="grid-template-columns:1fr 1fr 1fr;">
+      <div class="tips-col" id="coach-training-tips"></div>
+      <div class="tips-col" id="coach-track-tips"></div>
+      <div class="tips-col" id="coach-nutrition-tips"></div>
+    </div>
+  </details>
+
+  <div class="tabs" id="tabs-container"></div>
+  <div id="plan-container"></div>
+
+  <footer class="footer-credit">
+    Designed &amp; built by <strong>Elina Juan</strong> · Marathon Training Dashboard
+  </footer>
+</main>
+</div>
+
+<div class="save-toast" id="save-toast">已儲存</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { gsap } from "https://cdn.jsdelivr.net/npm/gsap@3.15/+esm";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDOyRqS1tLzfPixlQkOBWZP_ln01yFWFeg",
+    authDomain: "kenting21k.firebaseapp.com",
+    projectId: "kenting21k",
+    storageBucket: "kenting21k.firebasestorage.app",
+    messagingSenderId: "1030320225677",
+    appId: "1:1030320225677:web:dd60d814b352cc5cbb11c4"
+  };
+
+  const firebaseApp = initializeApp(firebaseConfig);
+  const db = getFirestore(firebaseApp);
+  const auth = getAuth(firebaseApp);
+  const googleProvider = new GoogleAuthProvider();
+
+  // 每個人登入後各自的文件路徑
+  let DOC_REF = null;      // users/{uid}/progress/main —— 打勾記錄、日記
+  let CONFIG_REF = null;   // users/{uid}/config/main   —— 這個人的課表設計
+  let currentUser = null;
+
+  // ---- 執行期會用到的課表資料（登入後才會確定內容） ----
+  let RACE_NAME = "";
+  let RACE_DATE = null;
+  let START_DATE = null;
+  let RACE_DISTANCE = 21.0975;
+  let TRACK_PERIOD = true;
+  let planData = [];
+  let activeMonthIndex = 0;
+  let saveTimer = null;
+
+  // 用本地時區解析 "YYYY-MM-DD" 格式的日期字串，避免 new Date() 預設當 UTC 解析導致跨時區跑掉一天
+  function parseLocalDate(dateStr){
+    if(typeof dateStr !== 'string') return new Date(dateStr);
+    const dateOnlyMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if(dateOnlyMatch){
+      const [, y, m, d] = dateOnlyMatch;
+      return new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
+    }
+    return new Date(dateStr);
+  }
+
+  function getDistanceTier(distance){
+    if(distance <= 10) return 'short';
+    if(distance <= 25) return 'half';
+    return 'full';
+  }
+
+  function generateGearItems(distance){
+    const tier = getDistanceTier(distance);
+    const core = [
+      { name: '號碼布、晶片、別針', id: 'g1' },
+      { name: '跑鞋（已磨合過的）', id: 'g2' },
+      { name: '排汗衫、跑褲、運動內衣', id: 'g3' },
+      { name: '帽子、運動墨鏡', id: 'g5' }
+    ];
+    if(tier === 'short'){
+      return [
+        ...core,
+        { name: '防風薄外套（視天氣）', id: 'g4' },
+        { name: '隨身小水壺（視天氣與距離）', id: 'g8' },
+        { name: '替換乾淨衣物、毛巾', id: 'g9' }
+      ];
+    }
+    if(tier === 'full'){
+      return [
+        ...core,
+        { name: '防風薄外套', id: 'g4' },
+        { name: '能量膠（6-8 包）', id: 'g6' },
+        { name: '鹽錠（4-6 顆）', id: 'g7' },
+        { name: 'BCAA／胺基酸補充品', id: 'g8' },
+        { name: '防磨凡士林或抗磨棒', id: 'g11' },
+        { name: '備用襪子', id: 'g12' },
+        { name: '運動貼布／肌貼', id: 'g13' },
+        { name: '賽後保溫毯／太空毯', id: 'g14' },
+        { name: '替換乾淨衣物、毛巾', id: 'g9' },
+        { name: '恢復軟底拖鞋', id: 'g10' }
+      ];
+    }
+    // half（預設）
+    return [
+      ...core,
+      { name: '防風薄外套', id: 'g4' },
+      { name: '能量膠（3-4 包）', id: 'g6' },
+      { name: '鹽錠（2-4 顆）', id: 'g7' },
+      { name: 'BCAA 或隨身小水壺', id: 'g8' },
+      { name: '替換乾淨衣物、毛巾', id: 'g9' },
+      { name: '恢復軟底拖鞋', id: 'g10' }
+    ];
+  }
+
+  let gearItems = generateGearItems(21.0975);
+
+  function generateWeekTemplate(distance){
+    const tier = getDistanceTier(distance);
+    if(tier === 'short'){
+      return [
+        { day: '週一', normal: '下半身重訓', period: '輕重量下肢／瑜伽' },
+        { day: '週二', normal: '輕鬆跑 4K', period: '快走或超慢跑 3K' },
+        { day: '週三', normal: '上半身重訓＋核心', period: '上半身重訓' },
+        { day: '週四', normal: '間歇／節奏跑 4K', period: '輕鬆跑 3K' },
+        { day: '週五', normal: '完全休息', period: '完全休息' },
+        { day: '週六', normal: '長距離慢跑', period: '長距離減量慢跑' },
+        { day: '週日', normal: '完全休息／散步', period: '完全休息／散步' }
+      ];
+    }
+    if(tier === 'full'){
+      return [
+        { day: '週一', normal: '下半身重訓', period: '輕重量下肢／瑜伽' },
+        { day: '週二', normal: '輕鬆跑 10K', period: '快走或超慢跑 6K' },
+        { day: '週三', normal: '上半身重訓＋核心', period: '上半身重訓' },
+        { day: '週四', normal: '節奏跑 10-12K', period: '輕鬆跑 8K' },
+        { day: '週五', normal: '完全休息或輕鬆跑 5K', period: '完全休息' },
+        { day: '週六', normal: 'LSD 長距離慢跑', period: 'LSD 減量長跑' },
+        { day: '週日', normal: '恢復跑 6-8K／散步', period: '完全休息／散步' }
+      ];
+    }
+    // half（預設）
+    return [
+      { day: '週一', normal: '下半身重訓', period: '輕重量下肢／瑜伽' },
+      { day: '週二', normal: '輕鬆跑 8K', period: '快走或超慢跑 5K' },
+      { day: '週三', normal: '上半身重訓＋核心', period: '上半身重訓' },
+      { day: '週四', normal: '節奏跑 8K', period: '輕鬆跑 6K' },
+      { day: '週五', normal: '完全休息', period: '完全休息' },
+      { day: '週六', normal: 'LSD 長距離慢跑', period: 'LSD 減量長跑' },
+      { day: '週日', normal: '完全休息／散步', period: '完全休息／散步' }
+    ];
+  }
+
+  let baseWeekTemplate = generateWeekTemplate(21.0975);
+
+  // ---- 內建範本：Elina 的墾丁半馬課表（保留原始資料，供舊使用者與範本選項使用） ----
+  const KENTING_TEMPLATE = {
+    raceName: "2026屏東墾丁日本航空國際馬拉松 21K",
+    raceDate: "2026-11-15T06:00:00",
+    startDate: "2026-06-29",
+    raceDistance: 21.0975,
+    dietType: "vegetarian",
+    climateType: "windy",
+    trackPeriod: true,
+    isKentingTemplate: true,
+    planData: [
+      { month: "7月（建立耐力與適應期）", short: "7月份", weeks: [
+        { w: 1, title: "Week 1", lsd: "10K", p_lsd: "8K" },
+        { w: 2, title: "Week 2", lsd: "11K", p_lsd: "10K" },
+        { w: 3, title: "Week 3", lsd: "12K", p_lsd: "10K" },
+        { w: 4, title: "Week 4", lsd: "10K", p_lsd: "10K" },
+        { w: 5, title: "Week 5", lsd: "13K", p_lsd: "10K" }
+      ]},
+      { month: "8月（耐力突破與有氧強化）", short: "8月份", weeks: [
+        { w: 6, title: "Week 6", lsd: "14K", p_lsd: "11K" },
+        { w: 7, title: "Week 7", lsd: "15K", p_lsd: "11K" },
+        { w: 8, title: "Week 8", lsd: "11K", p_lsd: "11K" },
+        { w: 9, title: "Week 9", lsd: "16K", p_lsd: "12K" }
+      ]},
+      { month: "9月（巔峰與模擬墾丁期）", short: "9月份", weeks: [
+        { w: 10, title: "Week 10", lsd: "17K", p_lsd: "12K" },
+        { w: 11, title: "Week 11", lsd: "12K", p_lsd: "12K" },
+        { w: 12, title: "Week 12", lsd: "18K", p_lsd: "14K" },
+        { w: 13, title: "Week 13", lsd: "15K 穩速跑", p_lsd: "12K" }
+      ]},
+      { month: "10月（鞏固里程與賽前微調）", short: "10月份", weeks: [
+        { w: 14, title: "Week 14", lsd: "16K", p_lsd: "12K", coachNote: "🌬️ 本週挑一次有風天氣做 LSD，練習抗風跑姿與呼吸節奏，提前適應墾丁落山風。" },
+        { w: 15, title: "Week 15", lsd: "18K", p_lsd: "13K", coachNote: "☀️ 開始熱適應：安排 1 次中午時段輕鬆跑，觀察排汗量與補水頻率。" },
+        { w: 16, title: "Week 16", lsd: "12K", p_lsd: "12K", coachNote: "☀️ 熱適應加碼：週三或週四中午練節奏跑，跑前跑後都要秤體重確認補水足夠。" },
+        { w: 17, title: "Week 17", lsd: "14K 輕鬆跑", p_lsd: "12K", coachNote: "🌬️ LSD 選逆風路線練習，逆風配速變慢是正常的，別焦慮。" }
+      ]},
+      { month: "11月（賽前倒數與減量蓄能）", short: "11月份", weeks: [
+        { w: 18, title: "Week 18", lsd: "10K 賽事配速", p_lsd: "10K", coachNote: "📉 減量週：里程下降但保留一點節奏跑，避免雙腿太閒反而僵硬。" },
+        { w: 19, title: "Week 19", lsd: "8K 輕鬆跑", p_lsd: "8K", coachNote: "🍚 賽前肝醣儲備開始：本週起逐日提高白飯、麵條、地瓜比例，減少高纖豆類。" },
+        { w: 20, title: "Week 20 比賽週", lsd: "6K 輕鬆跑", p_lsd: "6K", special: true, coachNote: "🎽 比賽週：賽前 3 天持續碳水儲備、提早一晚睡飽、鹽錠與能量膠賽前一晚打包好！" }
+      ]}
+    ]
+  };
+
+  // ---- 依基本資訊自動產生課表（給自訂使用者用） ----
+  function generatePlanData(cfg){
+    const { totalWeeks, startLsd, peakLsd, taperWeeks } = cfg;
+    const buildWeeks = totalWeeks - taperWeeks;
+    const weeks = [];
+    for(let w = 1; w <= totalWeeks; w++){
+      let lsd;
+      if(w <= buildWeeks){
+        // 建立期：線性遞增，每 4 週安排一次減量週（距離稍降）
+        const progress = (w - 1) / Math.max(buildWeeks - 1, 1);
+        lsd = Math.round(startLsd + (peakLsd - startLsd) * progress);
+        if(w % 4 === 0) lsd = Math.max(startLsd, Math.round(lsd * 0.75));
+      } else {
+        // 減量期：從高點逐週往下收，最後一週最短
+        const taperIndex = w - buildWeeks; // 1..taperWeeks
+        const taperProgress = taperIndex / taperWeeks;
+        lsd = Math.round(peakLsd - (peakLsd - Math.min(8, startLsd)) * taperProgress);
+      }
+      lsd = Math.max(5, lsd);
+      const p_lsd = Math.max(5, Math.round(lsd * 0.75));
+      const isLast = w === totalWeeks;
+      weeks.push({
+        w,
+        title: isLast ? `Week ${w} 比賽週` : `Week ${w}`,
+        lsd: `${lsd}K`,
+        p_lsd: `${p_lsd}K`,
+        special: isLast
+      });
+    }
+    // 依實際日期把每週分配到對應月份分頁
+    const start = parseLocalDate(cfg.startDate);
+    const monthGroups = [];
+    weeks.forEach((week, idx) => {
+      const weekStart = new Date(start);
+      weekStart.setDate(weekStart.getDate() + idx * 7);
+      const key = `${weekStart.getFullYear()}-${weekStart.getMonth()}`;
+      let group = monthGroups.find(g => g.key === key);
+      if(!group){
+        group = { key, month: `${weekStart.getMonth()+1}月`, short: `${weekStart.getMonth()+1}月份`, weeks: [] };
+        monthGroups.push(group);
+      }
+      group.weeks.push(week);
+    });
+    return monthGroups;
+  }
+
+  let userData = {
+    checkedTasks: {}, periodWeeks: {}, customTexts: {}, weeklyJournals: {}, gearChecked: {},
+    paceTarget: { h: 2, m: 15 }
+  };
+
+  function showToast(){
+    const t = document.getElementById('save-toast');
+    clearTimeout(saveTimer);
+    gsap.killTweensOf(t);
+    gsap.fromTo(t,
+      { y: 20, opacity: 0 },
+      { y: 0, opacity: 0.92, duration: 0.3, ease: "back.out(2)" }
+    );
+    saveTimer = setTimeout(() => {
+      gsap.to(t, { y: 20, opacity: 0, duration: 0.25, ease: "power1.in" });
+    }, 1200);
+  }
+
+  async function loadData(){
+    try{
+      const snap = await getDoc(DOC_REF);
+      if(snap.exists()){
+        const data = snap.data();
+        if(data && data.payload){
+          userData = { ...userData, ...JSON.parse(data.payload) };
+        }
+      }
+    }catch(e){
+      console.log('尚無先前存檔，或讀取失敗，使用預設值', e);
+    }
+    document.getElementById('pace-h').value = userData.paceTarget.h;
+    document.getElementById('pace-m').value = userData.paceTarget.m;
+  }
+
+  async function saveData(){
+    try{
+      await setDoc(DOC_REF, { payload: JSON.stringify(userData), updatedAt: new Date().toISOString() });
+      showToast();
+    }catch(e){
+      console.error('儲存失敗', e);
+    }
+    updateDashboard();
+    updateGearProgress();
+  }
+
+  function getDateForTask(weekIndex, dayIndex){
+    const date = new Date(START_DATE);
+    date.setDate(date.getDate() + ((weekIndex - 1) * 7) + dayIndex);
+    return `${date.getMonth() + 1}/${date.getDate()}`;
+  }
+
+  function calculatePace(skipSave){
+    const h = parseInt(document.getElementById('pace-h').value) || 0;
+    const m = parseInt(document.getElementById('pace-m').value) || 0;
+    userData.paceTarget = { h, m };
+    if(!skipSave) saveData();
+    const totalMinutes = (h * 60) + m;
+    if(totalMinutes <= 0) return;
+    const paceSeconds = (totalMinutes * 60) / RACE_DISTANCE;
+    const fmt = (s) => `${Math.floor(s/60)}'${Math.floor(s%60).toString().padStart(2,'0')}"`;
+    document.getElementById('res-race').innerText = fmt(paceSeconds);
+    document.getElementById('res-easy').innerText = fmt(paceSeconds + 75);
+    document.getElementById('res-tempo').innerText = fmt(paceSeconds - 5);
+  }
+
+  function renderGearList(){
+    const container = document.getElementById('gear-list-container');
+    container.innerHTML = '';
+    gearItems.forEach(item => {
+      const isChecked = userData.gearChecked[item.id] ? 'checked' : '';
+      const row = document.createElement('div');
+      row.className = 'gear-row';
+      row.innerHTML = `
+        <label class="gear-check">
+          <input type="checkbox" onchange="toggleGear('${item.id}', this)" ${isChecked}>
+          <div class="gear-box"><i class="ph-bold ph-check"></i></div>
+        </label>
+        <span class="gear-name ${isChecked ? 'done' : ''}">${item.name}</span>
+      `;
+      container.appendChild(row);
+    });
+    updateGearProgress();
+  }
+
+  function toggleGear(id, checkboxEl){
+    userData.gearChecked[id] = !userData.gearChecked[id];
+    const box = checkboxEl ? checkboxEl.nextElementSibling : null;
+    if(box && userData.gearChecked[id]){
+      gsap.fromTo(box, { scale: 0.6 }, { scale: 1, duration: 0.35, ease: "back.out(3)" });
+    }
+    saveData();
+    setTimeout(() => renderGearList(), box ? 160 : 0);
+  }
+
+  function updateGearProgress(){
+    const completed = Object.values(userData.gearChecked).filter(Boolean).length;
+    document.getElementById('gear-progress').innerText = `${completed}/${gearItems.length}`;
+  }
+
+  function renderTabs(){
+    const tabsContainer = document.getElementById('tabs-container');
+    tabsContainer.innerHTML = '';
+    planData.forEach((monthData, index) => {
+      const isActive = index === activeMonthIndex;
+      const btn = document.createElement('button');
+      btn.className = `tab-btn ${isActive ? 'active' : ''}`;
+      btn.innerText = monthData.short;
+      btn.onclick = () => { activeMonthIndex = index; renderTabs(); renderPlan(); };
+      tabsContainer.appendChild(btn);
+    });
+  }
+
+  function renderPlan(){
+    const container = document.getElementById('plan-container');
+    container.innerHTML = '';
+    const monthData = planData[activeMonthIndex];
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `<h2 class="month-title">${monthData.month}</h2>`;
+    const grid = document.createElement('div');
+    grid.className = 'week-grid';
+
+    monthData.weeks.forEach(week => {
+      const isPeriod = userData.periodWeeks[`w${week.w}`] || false;
+      const card = document.createElement('div');
+      card.className = `week-card ${isPeriod ? 'period' : ''}`;
+
+      let html = `<div class="week-head">
+        <h4>${week.title}</h4>
+        ${TRACK_PERIOD ? `<button onclick="togglePeriod(${week.w})" class="period-btn ${isPeriod ? 'on' : ''}">生理期模式</button>` : ''}
+      </div>`;
+
+      if(week.coachNote){
+        html += `<div class="coach-note">${week.coachNote}</div>`;
+      }
+
+      baseWeekTemplate.forEach((dayTpl, dayIndex) => {
+        const taskId = `w${week.w}-d${dayIndex}`;
+        const isChecked = userData.checkedTasks[taskId] ? 'checked' : '';
+        let taskText = isPeriod ? dayTpl.period : dayTpl.normal;
+        if(dayIndex === 5) taskText = isPeriod ? `LSD ${week.p_lsd} 輕鬆跑` : `LSD ${week.lsd}`;
+        if(week.special && dayIndex === 6) taskText = "🎉 日本航空墾丁路跑 21K！";
+
+        const textKey = isPeriod ? `${taskId}-period` : `${taskId}-normal`;
+        const displayText = userData.customTexts[textKey] || taskText;
+
+        html += `
+          <div class="task-row">
+            <label class="task-check">
+              <input type="checkbox" onchange="toggleTask('${taskId}', this)" ${isChecked}>
+              <div class="task-box"><i class="ph-bold ph-check"></i></div>
+            </label>
+            <span class="task-day">${dayTpl.day}<br><span class="task-date">${getDateForTask(week.w, dayIndex)}</span></span>
+            <span class="task-text ${isChecked ? 'done' : ''}" contenteditable="true" onblur="saveCustomText('${textKey}', this.innerText)">${displayText}</span>
+          </div>
+        `;
+      });
+
+      html += `<textarea class="journal" placeholder="本週體感日記..." oninput="this.style.height='auto'; this.style.height=this.scrollHeight+'px';" onblur="saveJournal('w${week.w}', this.value)">${userData.weeklyJournals[`w${week.w}`] || ''}</textarea>`;
+      card.innerHTML = html;
+      grid.appendChild(card);
+    });
+    wrap.appendChild(grid);
+    container.appendChild(wrap);
+    gsap.fromTo(wrap, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+    document.querySelectorAll('.journal').forEach(el => {
+      el.style.height = 'auto';
+      el.style.height = (el.scrollHeight) + 'px';
+    });
+    updateDashboard();
+  }
+
+  function toggleTask(id, checkboxEl){
+    userData.checkedTasks[id] = !userData.checkedTasks[id];
+    const box = checkboxEl ? checkboxEl.nextElementSibling : null;
+    if(box && userData.checkedTasks[id]){
+      gsap.fromTo(box, { scale: 0.6 }, { scale: 1, duration: 0.35, ease: "back.out(3)" });
+    }
+    saveData();
+    setTimeout(() => renderPlan(), box ? 160 : 0);
+  }
+  function saveCustomText(key, text){ userData.customTexts[key] = text.trim(); saveData(); }
+  function saveJournal(key, text){ userData.weeklyJournals[key] = text.trim(); saveData(); }
+  function togglePeriod(w){ userData.periodWeeks[`w${w}`] = !userData.periodWeeks[`w${w}`]; saveData(); renderPlan(); }
+
+  // module 內的函式不會自動變成全域，這裡手動掛到 window 讓 HTML 的 onclick/onchange/onblur 抓得到
+  window.calculatePace = calculatePace;
+  window.toggleGear = toggleGear;
+  window.toggleTask = toggleTask;
+  window.saveCustomText = saveCustomText;
+  window.saveJournal = saveJournal;
+  window.togglePeriod = togglePeriod;
+
+  function updateDashboard(){
+    const completed = Object.values(userData.checkedTasks).filter(Boolean).length;
+    const totalWeeks = planData.reduce((sum, group) => sum + group.weeks.length, 0);
+    const totalDays = totalWeeks * 7;
+    const pct = totalDays > 0 ? Math.round((completed / totalDays) * 100) : 0;
+    document.getElementById('total-progress-text').innerText = `${pct}%`;
+    gsap.to('#progress-bar-fill', { width: `${pct}%`, duration: 0.6, ease: "power2.out" });
+    document.getElementById('completed-days-text').innerText = `${completed} / ${totalDays}`;
+  }
+
+  function updateCountdown(){
+    const dist = RACE_DATE - new Date().getTime();
+    const d = Math.max(0, Math.floor(dist / (1000 * 60 * 60 * 24)));
+    const h = Math.max(0, Math.floor((dist % (1000*60*60*24)) / (1000*60*60)));
+    const m = Math.max(0, Math.floor((dist % (1000*60*60)) / (1000*60)));
+    const s = Math.max(0, Math.floor((dist % (1000*60)) / 1000));
+    document.getElementById('cd-days').innerText = d.toString().padStart(2,'0');
+    document.getElementById('cd-hours').innerText = h.toString().padStart(2,'0');
+    document.getElementById('cd-mins').innerText = m.toString().padStart(2,'0');
+    document.getElementById('cd-secs').innerText = s.toString().padStart(2,'0');
+  }
+
+  function setupAccordions(){
+    document.querySelectorAll('details.tips').forEach(det => {
+      if(det.dataset.accordionReady) return;
+      det.dataset.accordionReady = 'true';
+      const summary = det.querySelector('summary');
+      const body = det.querySelector('.tips-body');
+      summary.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isOpen = det.hasAttribute('open');
+        if(isOpen){
+          gsap.to(body, {
+            height: 0, opacity: 0, duration: 0.3, ease: "power2.inOut",
+            onComplete: () => { det.removeAttribute('open'); body.style.height = ''; }
+          });
+        } else {
+          det.setAttribute('open', '');
+          const targetHeight = body.scrollHeight;
+          gsap.fromTo(body,
+            { height: 0, opacity: 0 },
+            { height: targetHeight, opacity: 1, duration: 0.35, ease: "power2.out",
+              onComplete: () => { body.style.height = 'auto'; } }
+          );
+        }
+      });
+    });
+  }
+
+  async function initApp(){
+    await loadData();
+    calculatePace(true);
+    renderGearList();
+    renderTabs();
+    renderPlan();
+    updateCountdown();
+    setupAccordions();
+    if(!window.__countdownStarted){
+      window.__countdownStarted = true;
+      setInterval(updateCountdown, 1000);
+    }
+  }
+
+  function renderTips1(cfg){
+    const titleEl = document.getElementById('tips1-title');
+    const nutritionEl = document.getElementById('tips1-nutrition-col');
+    const strategyEl = document.getElementById('tips1-strategy-col');
+    const diet = cfg.dietType || 'none';
+    const trackPeriod = cfg.trackPeriod !== false;
+    const tier = getDistanceTier(cfg.raceDistance || 21.0975);
+
+    const strategyContent = {
+      short: [
+        '<strong>有氧基礎優先：</strong>短距離不用堆高里程，先求跑步動作品質與心肺適應。',
+        '<strong>加入速度刺激：</strong>可適度安排間歇或節奏跑，提升配速穩定度。',
+        '<strong>跑後恢復別偷懶：</strong>距離短恢復快，但跑後伸展、放鬆一樣重要。'
+      ],
+      half: [
+        '<strong>80/20 法則：</strong>大膽放慢，拒絕無效的垃圾里程。',
+        '<strong>重訓與跑步分離：</strong>給雙腿 4 天修復期，迎接週六長跑。'
+      ],
+      full: [
+        '<strong>長距離耐力優先：</strong>週里程與長跑距離是全馬成功關鍵，寧可放慢也要跑完預定距離。',
+        '<strong>恢復與睡眠是訓練的一部分：</strong>全馬對身體負荷大，恢復不足比訓練不足更容易受傷。',
+        '<strong>減量期心理調適：</strong>賽前減量容易心慌覺得練不夠，相信之前累積的訓練成果。'
+      ]
+    };
+
+    const bullets = strategyContent[tier] || strategyContent.half;
+    let strategyHtml = `<h4><i class="ph-bold ph-person-simple-run" style="color:var(--purple);"></i> 核心訓練策略</h4><ul>`;
+    bullets.forEach(b => {
+      strategyHtml += `<li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span>${b}</span></li>`;
+    });
+    if(trackPeriod){
+      strategyHtml += `<li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span><strong>傾聽生理週期：</strong>勇敢開啟「生理期模式」，降低強度。</span></li>`;
+    }
+    strategyHtml += `</ul>`;
+    strategyEl.innerHTML = strategyHtml;
+
+    const ironText = {
+      vegetarian: trackPeriod
+        ? '飯後配芭樂或奇異果，維 C 讓植物鐵吸收率暴增 3 倍！'
+        : '植物性鐵質吸收率較低，建議飯後配芭樂或奇異果，維 C 能幫助吸收。',
+      vegan: trackPeriod
+        ? '全素者鐵質、B12 較容易不足，建議搭配芭樂、奇異果補充維 C 幫助吸收，並定期追蹤 B12 數值。'
+        : '全素者鐵質、B12 較容易不足，建議定期追蹤數值，並搭配芭樂、奇異果補充維 C 幫助鐵質吸收。',
+      none: trackPeriod
+        ? '飯後配芭樂或奇異果，維 C 能提升鐵質吸收率。'
+        : '長跑會加速鐵質消耗，飯後配芭樂或奇異果，維 C 能提升吸收率。'
+    };
+
+    const dietContent = {
+      vegetarian: {
+        title: '教練備賽小叮嚀與蛋奶素飲食指南',
+        heading: '蛋奶素與補給提醒',
+        recovery: '運動後補碳水＋蛋白質（例：豆漿＋地瓜、茶葉蛋、起司）。'
+      },
+      vegan: {
+        title: '教練備賽小叮嚀與全素飲食指南',
+        heading: '全素與補給提醒',
+        recovery: '運動後補碳水＋植物性蛋白質（例：豆漿、毛豆、豆腐、堅果）。'
+      },
+      none: {
+        title: '教練備賽小叮嚀與日常補給指南',
+        heading: '日常補給提醒',
+        recovery: '運動後補碳水＋蛋白質（例：牛奶、雞蛋、豆漿都可以，挑自己方便取得的）。'
+      }
+    };
+
+    const d = dietContent[diet] || dietContent.none;
+    const ironLabel = trackPeriod ? '經期補鐵' : '鐵質補充';
+    titleEl.innerText = d.title;
+    nutritionEl.innerHTML = `
+      <h4><i class="ph-bold ph-leaf" style="color:#2E9E5B;"></i> ${d.heading}</h4>
+      <ul>
+        <li><i class="ph-bold ph-fork-knife" style="color:var(--coral-dark);"></i><span><strong>黃金 30 分鐘修復：</strong>${d.recovery}</span></li>
+        <li><i class="ph-bold ph-fork-knife" style="color:var(--coral-dark);"></i><span><strong>${ironLabel}：</strong>${ironText[diet] || ironText.none}</span></li>
+      </ul>`;
+  }
+
+  function renderCoachTips(cfg){
+    const isKenting = cfg.isKentingTemplate === true;
+    const titleEl = document.getElementById('coach-tips-title');
+    const trainingEl = document.getElementById('coach-training-tips');
+    const trackEl = document.getElementById('coach-track-tips');
+    const nutritionEl = document.getElementById('coach-nutrition-tips');
+    const climate = cfg.climateType || 'normal';
+    const diet = cfg.dietType || 'none';
+    const trackPeriod = cfg.trackPeriod !== false;
+    const tier = getDistanceTier(cfg.raceDistance || 21.0975);
+
+    const overtrainingWarning = trackPeriod
+      ? '靜止心率異常升高、持續痠痛超過 48 小時、月經週期紊亂，都是該減量的信號。'
+      : '靜止心率異常升高、持續痠痛超過 48 小時、睡眠品質明顯變差，都是該減量的信號。';
+
+    const trainingTierExtra = {
+      short: '短距離訓練強度高但時間短，恢復通常較快，但別因為「跑很短」就忽略跑前暖身，速度型訓練反而更容易拉傷。',
+      half: '長跑後一晚建議 7.5 小時以上睡眠，睡眠不足會直接影響隔日配速表現。',
+      full: '全馬對身體的累積負荷大，長跑後 1-2 天內留意肌肉痠痛與精神狀態，必要時多安排一天完全休息。'
+    };
+
+    trainingEl.innerHTML = `
+      <h4><i class="ph-bold ph-barbell" style="color:var(--purple);"></i> 訓練面補強</h4>
+      <ul>
+        <li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span><strong>暖身／收操固定化：</strong>每次訓練前 5-10 分鐘動態暖身（高抬腿、後踢腿、髖關節繞環），跑後靜態伸展＋泡棉滾筒放鬆小腿與髂脛束。</span></li>
+        <li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span><strong>恢復是訓練的一部分：</strong>${trainingTierExtra[tier] || trainingTierExtra.half}</span></li>
+        <li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span><strong>留意過度訓練警訊：</strong>${overtrainingWarning}</span></li>
+      </ul>`;
+
+    if(isKenting){
+      titleEl.innerText = '教練加碼提醒：訓練 × 賽道 × 賽前營養';
+      trackEl.innerHTML = `
+        <h4><i class="ph-bold ph-wind" style="color:var(--coral-dark);"></i> 墾丁賽道注意</h4>
+        <ul>
+          <li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span><strong>落山風：</strong>恆春半島 10-11 月起明顯起風，長跑訓練建議挑有風的日子練習抗風跑姿，賽前熟悉逆風配速會偏慢屬正常。</span></li>
+          <li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span><strong>熱適應：</strong>11 月恆春仍偏熱，賽前 2-3 週安排 1-2 次中午時段訓練，讓身體提前適應日曬與排汗量。</span></li>
+          <li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span><strong>減量週不減強度感：</strong>賽前兩週里程下降但保留一點節奏跑，避免雙腿「太閒」反而賽前僵硬。</span></li>
+        </ul>`;
+    } else {
+      const climateContent = {
+        hot: {
+          title: '炎熱賽事注意',
+          icon: 'ph-sun',
+          points: [
+            '<strong>熱適應：</strong>賽前 2-3 週安排 1-2 次中午時段訓練，讓身體提前適應日曬與排汗量，跑前跑後秤體重確認補水足夠。',
+            '<strong>補水頻率提高：</strong>炎熱環境流汗快，訓練跟比賽時補水間隔要比平常再縮短一些。',
+            '<strong>減量週不減強度感：</strong>賽前兩週里程下降但保留一點節奏跑，避免雙腿「太閒」反而賽前僵硬。'
+          ]
+        },
+        cold: {
+          title: '寒冷賽事注意',
+          icon: 'ph-snowflake',
+          points: [
+            '<strong>暖身時間拉長：</strong>低溫下肌肉、關節更僵硬，賽前暖身建議比平常多留 5-10 分鐘。',
+            '<strong>洋蔥式穿搭：</strong>訓練跟比賽都建議多層次穿著，方便體溫升高後脫掉外層。',
+            '<strong>減量週不減強度感：</strong>賽前兩週里程下降但保留一點節奏跑，避免雙腿「太閒」反而賽前僵硬。'
+          ]
+        },
+        windy: {
+          title: '多風賽道注意',
+          icon: 'ph-wind',
+          points: [
+            '<strong>抗風跑姿練習：</strong>賽前挑有風的日子練長跑，熟悉逆風時配速變慢是正常現象，別因此焦慮亂了節奏。',
+            '<strong>找人輪流領跑：</strong>如果賽事允許結伴，逆風路段可以跟同伴輪流擋風、省力。',
+            '<strong>減量週不減強度感：</strong>賽前兩週里程下降但保留一點節奏跑，避免雙腿「太閒」反而賽前僵硬。'
+          ]
+        },
+        humid: {
+          title: '潮濕悶熱賽事注意',
+          icon: 'ph-drop',
+          points: [
+            '<strong>電解質補充要提高：</strong>悶熱潮濕環境流汗量大又不易散熱，鹽錠、電解質補充頻率要比乾熱環境更頻繁。',
+            '<strong>裝備選擇：</strong>選排汗快乾的衣物，避免悶濕導致摩擦傷。',
+            '<strong>減量週不減強度感：</strong>賽前兩週里程下降但保留一點節奏跑，避免雙腿「太閒」反而賽前僵硬。'
+          ]
+        },
+        normal: {
+          title: '賽事環境提醒',
+          icon: 'ph-map-pin',
+          points: [
+            '<strong>提早了解賽道：</strong>查一下這場比賽的地形、坡度，賽前 2-3 週安排 1-2 次模擬環境的訓練。',
+            '<strong>氣候適應：</strong>如果比賽日天氣會跟平常訓練差很多，提早讓身體適應，別等到比賽當天才第一次體驗。',
+            '<strong>減量週不減強度感：</strong>賽前兩週里程下降但保留一點節奏跑，避免雙腿「太閒」反而賽前僵硬。'
+          ]
+        }
+      };
+
+      const c = climateContent[climate] || climateContent.normal;
+      titleEl.innerText = `教練加碼提醒：訓練 × 賽事環境 × 賽前營養`;
+      trackEl.innerHTML = `
+        <h4><i class="ph-bold ${c.icon}" style="color:var(--coral-dark);"></i> ${c.title}</h4>
+        <ul>
+          ${c.points.map(p => `<li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span>${p}</span></li>`).join('')}
+        </ul>`;
+    }
+
+    const nutritionNote = diet === 'vegetarian' ? '蛋奶素可用白米、麵條、地瓜、香蕉逐日增加碳水比例，減少高纖豆類避免賽中脹氣。'
+      : diet === 'vegan' ? '全素可用白米、麵條、地瓜、香蕉逐日增加碳水比例，減少高纖豆類避免賽中脹氣，注意蛋白質來源要跟上。'
+      : '逐日增加白米、麵條、地瓜、香蕉等好消化碳水比例，減少高纖食物避免賽中脹氣。';
+
+    const nutritionTierContent = {
+      short: {
+        heading: '賽前賽中營養（短距離）',
+        carboLoad: `<strong>不需刻意碳水超補：</strong>5-10K 屬於短時間高強度，正常均衡飲食即可，不用像長距離特別增加碳水比例。`,
+        breakfast: `<strong>賽前清淡進食：</strong>開跑前 1-2 小時吃少量好消化的碳水（香蕉、白吐司），避免吃太飽影響速度表現。`,
+        during: `<strong>賽中通常不需額外補給：</strong>除非天氣炎熱，否則 10K 以內不需要能量膠，專心維持配速即可。`
+      },
+      half: {
+        heading: '賽前賽中營養',
+        carboLoad: `<strong>賽前 3 天碳水儲備：</strong>${nutritionNote}`,
+        breakfast: `<strong>賽前早餐：</strong>開跑前 2-3 小時吃好消化的碳水（白吐司＋果醬、香蕉），避免高油高纖。`,
+        during: `<strong>賽中補給節奏：</strong>每 20-25 分鐘一口水，能量膠約每 45 分鐘一包，鹽錠依排汗量彈性補充。`
+      },
+      full: {
+        heading: '賽前賽中營養（全馬肝醣超補）',
+        carboLoad: `<strong>正式肝醣超補：</strong>賽前 3 天將碳水比例拉高到每日總熱量約 70%，${nutritionNote}賽前一晚安排一頓好消化的高碳水晚餐（白飯、麵食為主）。`,
+        breakfast: `<strong>賽前早餐：</strong>開跑前 3 小時吃好消化、吃慣的高碳水早餐（白吐司＋果醬、香蕉、白粥），避免臨時嘗試新食物。`,
+        during: `<strong>賽中補給更密集：</strong>每 30-45 分鐘補充一份醣類（能量膠或運動飲料），鹽錠依排汗量提高頻率，建議賽前先確認補給站位置並演練節奏。`
+      }
+    };
+
+    const n = nutritionTierContent[tier] || nutritionTierContent.half;
+    nutritionEl.innerHTML = `
+      <h4><i class="ph-bold ph-plant" style="color:#2E9E5B;"></i> ${n.heading}</h4>
+      <ul>
+        <li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span>${n.carboLoad}</span></li>
+        <li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span>${n.breakfast}</span></li>
+        <li><i class="ph-bold ph-check-circle" style="color:#2E9E5B;"></i><span>${n.during}</span></li>
+      </ul>`;
+  }
+
+  function applyConfig(cfg){
+    RACE_NAME = cfg.raceName;
+    RACE_DATE = parseLocalDate(cfg.raceDate).getTime();
+    START_DATE = parseLocalDate(cfg.startDate);
+    RACE_DISTANCE = cfg.raceDistance || 21.0975;
+    gearItems = generateGearItems(RACE_DISTANCE);
+    baseWeekTemplate = generateWeekTemplate(RACE_DISTANCE);
+    TRACK_PERIOD = cfg.trackPeriod !== false;
+    planData = cfg.planData;
+    activeMonthIndex = 0;
+
+    document.getElementById('race-title').innerText = `${RACE_NAME} 備賽計畫`;
+    document.getElementById('race-eyebrow').innerText = 'Race Countdown';
+    document.getElementById('countdown-label').innerText = '距離比賽倒數';
+    document.getElementById('gear-title-text').innerText = `${RACE_NAME} 裝備清單`;
+    document.getElementById('pace-calc-title').innerText = `${RACE_DISTANCE}K 目標配速計算機`;
+    document.title = `${RACE_NAME} 備賽計畫`;
+
+    const periodCard = document.getElementById('period-stat-card');
+    const statGrid = periodCard ? periodCard.parentElement : null;
+    if(periodCard){
+      periodCard.style.display = TRACK_PERIOD ? 'flex' : 'none';
+      if(statGrid) statGrid.classList.toggle('two-col', !TRACK_PERIOD);
+    }
+
+    renderTips1(cfg);
+    renderCoachTips(cfg);
+  }
+
+  const MIN_TRAINING_WEEKS = 4;
+  const MAX_TRAINING_WEEKS = 24; // 系統排課的上限，約半年
+
+  function calcWeeksInfo(){
+    const startVal = document.getElementById('setup-start-date').value;
+    const raceVal = document.getElementById('setup-race-date').value;
+    const infoEl = document.getElementById('setup-weeks-info');
+    if(!startVal || !raceVal){ infoEl.innerText = ''; return null; }
+
+    const startD = parseLocalDate(startVal);
+    const raceD = parseLocalDate(raceVal);
+    const rawWeeks = Math.round((raceD - startD) / (7 * 24 * 60 * 60 * 1000));
+
+    if(rawWeeks < MIN_TRAINING_WEEKS){
+      infoEl.style.color = 'var(--coral-dark)';
+      infoEl.innerText = `⚠️ 比賽日期太近了，只剩 ${Math.max(rawWeeks,0)} 週，建議至少抓 ${MIN_TRAINING_WEEKS} 週準備時間。`;
+      return { rawWeeks, usableWeeks: null, adjustedStart: null };
+    }
+
+    if(rawWeeks > MAX_TRAINING_WEEKS){
+      const adjustedStart = new Date(raceD);
+      adjustedStart.setDate(adjustedStart.getDate() - MAX_TRAINING_WEEKS * 7);
+      infoEl.style.color = 'var(--purple-dark)';
+      infoEl.innerText = `📅 比賽還有 ${rawWeeks} 週，目前系統一次排 ${MAX_TRAINING_WEEKS} 週課表，會從 ${adjustedStart.getMonth()+1}/${adjustedStart.getDate()} 開始排（比賽前 ${MAX_TRAINING_WEEKS} 週），現在先照平常訓練，之後再回來產生完整課表。`;
+      return { rawWeeks, usableWeeks: MAX_TRAINING_WEEKS, adjustedStart: adjustedStart.toISOString().slice(0,10) };
+    }
+
+    infoEl.style.color = 'var(--purple-dark)';
+    infoEl.innerText = `✅ 總共會排 ${rawWeeks} 週的訓練課表。`;
+    return { rawWeeks, usableWeeks: rawWeeks, adjustedStart: null };
+  }
+
+  document.getElementById('setup-start-date').addEventListener('change', calcWeeksInfo);
+  document.getElementById('setup-race-date').addEventListener('change', calcWeeksInfo);
+
+  document.getElementById('setup-race-distance').addEventListener('change', (e) => {
+    const customInput = document.getElementById('setup-race-distance-custom');
+    customInput.style.display = e.target.value === 'custom' ? 'block' : 'none';
+    applyLsdDefaults();
+  });
+
+  document.getElementById('setup-race-distance-custom').addEventListener('input', applyLsdDefaults);
+
+  function applyLsdDefaults(){
+    const distance = getSelectedRaceDistance();
+    const tier = getDistanceTier(distance);
+    const defaults = {
+      short: { start: 4, peak: 9 },
+      half:  { start: 8, peak: 16 },
+      full:  { start: 12, peak: 32 }
+    };
+    const d = defaults[tier] || defaults.half;
+    document.getElementById('setup-start-lsd').value = d.start;
+    document.getElementById('setup-peak-lsd').value = d.peak;
+  }
+
+  function getSelectedRaceDistance(){
+    const sel = document.getElementById('setup-race-distance').value;
+    if(sel === 'custom'){
+      return parseFloat(document.getElementById('setup-race-distance-custom').value) || 21.0975;
+    }
+    return parseFloat(sel);
+  }
+
+  function buildConfigFromForm(){
+    const raceName = document.getElementById('setup-race-name').value.trim();
+    const raceDistance = getSelectedRaceDistance();
+    const dietType = document.getElementById('setup-diet-type').value;
+    const climateType = document.getElementById('setup-climate-type').value;
+    const trackPeriod = document.getElementById('setup-track-period').value === 'yes';
+    const startDateVal = document.getElementById('setup-start-date').value;
+    const raceDateVal = document.getElementById('setup-race-date').value;
+    const taperWeeks = parseInt(document.getElementById('setup-taper-weeks').value) || 2;
+    const startLsd = parseInt(document.getElementById('setup-start-lsd').value) || 8;
+    const peakLsd = parseInt(document.getElementById('setup-peak-lsd').value) || 16;
+
+    if(!raceName || !startDateVal || !raceDateVal) return null;
+
+    const weeksInfo = calcWeeksInfo();
+    if(!weeksInfo || !weeksInfo.usableWeeks) return null;
+
+    const startDate = weeksInfo.adjustedStart || startDateVal;
+    const totalWeeks = weeksInfo.usableWeeks;
+
+    const cfg = { raceName, raceDistance, dietType, climateType, trackPeriod, startDate, raceDate: raceDateVal, totalWeeks, taperWeeks, startLsd, peakLsd };
+    cfg.planData = generatePlanData(cfg);
+    return cfg;
+  }
+
+  function showLogin(){
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('setup-screen').style.display = 'none';
+    document.getElementById('app-content').style.display = 'none';
+    gsap.fromTo('#login-screen .login-card',
+      { opacity: 0, y: 16, scale: 0.96 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power2.out" }
+    );
+  }
+
+  function showSetup(){
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('setup-screen').style.display = 'flex';
+    document.getElementById('app-content').style.display = 'none';
+    // 預設值：開始日期今天、比賽日期 12 週後
+    const today = new Date();
+    const defaultRace = new Date(today);
+    defaultRace.setDate(defaultRace.getDate() + 12 * 7);
+    document.getElementById('setup-start-date').value = today.toISOString().slice(0,10);
+    document.getElementById('setup-race-date').value = defaultRace.toISOString().slice(0,10);
+    calcWeeksInfo();
+    applyLsdDefaults();
+    goToSetupStep(1);
+  }
+
+  function showApp(user){
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('setup-screen').style.display = 'none';
+    document.getElementById('app-content').style.display = 'block';
+    document.getElementById('user-bar').style.display = 'flex';
+    document.getElementById('user-avatar').src = user.photoURL || '';
+    document.getElementById('user-name').innerText = user.displayName || user.email || '';
+  }
+
+  document.getElementById('google-signin-btn').addEventListener('click', async () => {
+    const errEl = document.getElementById('login-error');
+    errEl.style.display = 'none';
+    try{
+      await signInWithPopup(auth, googleProvider);
+    }catch(e){
+      console.error('登入失敗', e);
+      errEl.style.display = 'block';
+    }
+  });
+
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    await signOut(auth);
+  });
+
+  let currentSetupStep = 1;
+  const TOTAL_SETUP_STEPS = 3;
+
+  function goToSetupStep(step){
+    currentSetupStep = step;
+    for(let i = 1; i <= TOTAL_SETUP_STEPS; i++){
+      document.getElementById(`setup-step-${i}`).style.display = (i === step) ? 'block' : 'none';
+      const dot = document.querySelector(`.setup-progress-dot[data-step="${i}"]`);
+      dot.classList.toggle('active', i === step);
+      dot.classList.toggle('done', i < step);
+    }
+    document.getElementById('setup-back-btn').style.visibility = (step === 1) ? 'hidden' : 'visible';
+    document.getElementById('setup-next-btn').style.display = (step === TOTAL_SETUP_STEPS) ? 'none' : 'block';
+    document.getElementById('setup-submit-btn').style.display = (step === TOTAL_SETUP_STEPS) ? 'block' : 'none';
+    document.getElementById('setup-error').style.display = 'none';
+  }
+
+  function validateSetupStep(step){
+    const errEl = document.getElementById('setup-error');
+    if(step === 1){
+      const raceName = document.getElementById('setup-race-name').value.trim();
+      const startDateVal = document.getElementById('setup-start-date').value;
+      const raceDateVal = document.getElementById('setup-race-date').value;
+      if(!raceName || !startDateVal || !raceDateVal){
+        errEl.innerText = '請先填寫賽事名稱、開始訓練日期與比賽日期。';
+        errEl.style.display = 'block';
+        return false;
+      }
+      const weeksInfo = calcWeeksInfo();
+      if(!weeksInfo || !weeksInfo.usableWeeks){
+        errEl.innerText = '比賽日期太近了，請至少抓 4 週準備時間。';
+        errEl.style.display = 'block';
+        return false;
+      }
+    }
+    return true;
+  }
+
+  document.getElementById('setup-next-btn').addEventListener('click', () => {
+    if(!validateSetupStep(currentSetupStep)) return;
+    if(currentSetupStep < TOTAL_SETUP_STEPS) goToSetupStep(currentSetupStep + 1);
+  });
+
+  document.getElementById('setup-back-btn').addEventListener('click', () => {
+    if(currentSetupStep > 1) goToSetupStep(currentSetupStep - 1);
+  });
+
+  document.getElementById('setup-submit-btn').addEventListener('click', async () => {
+    const errEl = document.getElementById('setup-error');
+    const cfg = buildConfigFromForm();
+    if(!cfg){
+      errEl.style.display = 'block';
+      return;
+    }
+    errEl.style.display = 'none';
+    try{
+      await setDoc(CONFIG_REF, cfg);
+    }catch(e){
+      console.error('儲存課表設定失敗', e);
+    }
+    applyConfig(cfg);
+    showApp(currentUser);
+    await initApp();
+  });
+
+  document.getElementById('setup-template-btn').addEventListener('click', async () => {
+    try{
+      await setDoc(CONFIG_REF, KENTING_TEMPLATE);
+    }catch(e){
+      console.error('儲存課表設定失敗', e);
+    }
+    applyConfig(KENTING_TEMPLATE);
+    showApp(currentUser);
+    await initApp();
+  });
+
+  onAuthStateChanged(auth, async (user) => {
+    if(user){
+      currentUser = user;
+      DOC_REF = doc(db, "users", user.uid, "progress", "main");
+      CONFIG_REF = doc(db, "users", user.uid, "config", "main");
+      userData = {
+        checkedTasks: {}, periodWeeks: {}, customTexts: {}, weeklyJournals: {}, gearChecked: {},
+        paceTarget: { h: 2, m: 15 }
+      };
+
+      let cfg = null;
+      try{
+        const cfgSnap = await getDoc(CONFIG_REF);
+        if(cfgSnap.exists()) cfg = cfgSnap.data();
+      }catch(e){
+        console.log('尚無課表設定', e);
+      }
+
+      if(cfg){
+        // 已經有自己的課表設定，直接進入
+        applyConfig(cfg);
+        showApp(user);
+        await initApp();
+      } else {
+        // 沒有課表設定：檢查是不是「真的」有在用的舊使用者
+        // 判斷標準是「有沒有實際打勾記錄」，不是「檔案存不存在」
+        // （因為系統初始化時可能會先寫入一份空的預設值，光看檔案存在會誤判）
+        let hasRealProgress = false;
+        try{
+          const progressSnap = await getDoc(DOC_REF);
+          if(progressSnap.exists()){
+            const data = progressSnap.data();
+            if(data && data.payload){
+              const parsed = JSON.parse(data.payload);
+              hasRealProgress = Object.values(parsed.checkedTasks || {}).some(Boolean)
+                || Object.keys(parsed.customTexts || {}).length > 0
+                || Object.keys(parsed.weeklyJournals || {}).length > 0
+                || Object.keys(parsed.periodWeeks || {}).length > 0;
+            }
+          }
+        }catch(e){ /* 沒有資料，當作新使用者 */ }
+
+        if(hasRealProgress){
+          try{ await setDoc(CONFIG_REF, KENTING_TEMPLATE); }catch(e){ console.error(e); }
+          applyConfig(KENTING_TEMPLATE);
+          showApp(user);
+          await initApp();
+        } else {
+          showSetup();
+        }
+      }
+    } else {
+      currentUser = null;
+      DOC_REF = null;
+      CONFIG_REF = null;
+      showLogin();
+    }
+  });
+</script>
+</body>
+</html>
